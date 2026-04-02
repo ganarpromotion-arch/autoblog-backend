@@ -300,12 +300,12 @@ async def login(req: LoginReq, request: Request, response: Response):
         key="ab_token",
         value=token,
         httponly=True,          # JS 접근 불가 → XSS 방어
-        secure=False,           # HTTPS 배포 시 True로 변경
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=60 * 60 * 24 * JWT_EXPIRE_DAYS,
     )
     logger.info(f"✓ 로그인 — IP:{ip} uid:{row['id']}")
-    return {"ok": True, "email": req.email}
+    return {"ok": True, "email": req.email, "token": token}
 
 @app.post("/api/auth/logout")
 async def logout(response: Response):
