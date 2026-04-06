@@ -64,13 +64,13 @@ app = FastAPI(
     openapi_url=None,     # 스키마 비공개
 )
 
+_origin = os.getenv("FRONTEND_ORIGIN", "*")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_ORIGIN", "http://localhost:5173"),
-                   "http://localhost:3000", "http://localhost:8000"],
-    allow_credentials=True,          # 쿠키 허용
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["Content-Type"],
+    allow_origins=["*"] if _origin == "*" else [_origin, "http://localhost:3000", "http://localhost:8000"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ─── Rate Limiter ────────────────────────────────────────────
